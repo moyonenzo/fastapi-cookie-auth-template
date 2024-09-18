@@ -62,6 +62,8 @@ def login(body: LoginPayload, response: Response, db: Session = Depends(get_db))
         key="authenticator", value=token, max_age=24 * 3600, secure=False, httponly=True
     )
 
+    return utils.retrieve_access_token(token)
+
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 def logout(
