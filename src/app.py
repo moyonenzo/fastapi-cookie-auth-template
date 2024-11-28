@@ -6,13 +6,14 @@ from src.routes.auth import router as auth_router
 from src.routes.users import router as users_router
 
 app = FastAPI()
+origins = ["http://localhost"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=[""],
+    allow_headers=["*"],
 )
 
 app.include_router(index_router, tags=["Index"])
