@@ -1,8 +1,8 @@
-import os
+import os, re
 
 from fastapi import APIRouter, Depends, status, HTTPException, Response, UploadFile
 from fastapi.responses import FileResponse
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, validator
 from sqlalchemy.orm import Session
 from PIL import Image
 
@@ -18,6 +18,15 @@ class RegisterPayload(BaseModel):
     username: str = Field(pattern=r"[a-zA-Z0-9_-]")
     email: EmailStr
     password: str
+
+    @validator("password")
+    def validate_password(cls, value):
+        regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=.{8,}).*$"
+        if not re.match(regex, value):
+            raise ValueError(
+                "Password must contain at least 8 characters, including an uppercase letter, a lowercase letter, and a special character."
+            )
+        return value
 
 
 class LoginPayload(BaseModel):
