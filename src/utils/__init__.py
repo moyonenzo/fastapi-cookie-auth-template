@@ -14,8 +14,8 @@ from src.utils.webtokens import (
 logger = structlog.get_logger(__name__)
 
 
-async def get_authenticator(authenticator: Annotated[str | None, Cookie()] = None):
-    if authenticator is None:
+async def get_identity(identity: Annotated[str | None, Cookie()] = None):
+    if identity is None:
         return None
 
-    return retrieve_access_token(authenticator)
+    return retrieve_access_token(identity)

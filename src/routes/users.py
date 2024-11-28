@@ -36,12 +36,12 @@ def get_user_photo(user_id: int, size: PhotoSize = PhotoSize.MEDIUM):
 def set_user_photo(
     user_id: int,
     photo: UploadFile,
-    authenticator: str | None = Depends(utils.get_authenticator),
+    identity: str | None = Depends(utils.get_identity),
 ):
-    if authenticator is None:
+    if identity is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    if authenticator["id"] != user_id:
+    if identity["id"] != user_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     extension = photo.content_type

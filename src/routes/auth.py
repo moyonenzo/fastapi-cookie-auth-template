@@ -35,10 +35,10 @@ class LoginPayload(BaseModel):
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
-def auth(authenticator: str | None = Depends(utils.get_authenticator)):
-    if authenticator is None:
+def auth(identity: str | None = Depends(utils.get_identity)):
+    if identity is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    return authenticator
+    return identity
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
@@ -75,10 +75,8 @@ def login(body: LoginPayload, response: Response, db: Session = Depends(get_db))
 
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
-def logout(
-    response: Response, authenticator: str | None = Depends(utils.get_authenticator)
-):
-    if authenticator is None:
+def logout(response: Response, identity: str | None = Depends(utils.get_identity)):
+    if identity is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     response.delete_cookie("authenticator")
